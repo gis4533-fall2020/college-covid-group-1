@@ -1,4 +1,4 @@
-<! -- Adapted from source: https://github.com/kristofj-umd/webdev-unit/blob/master/webdev5-examples/feature-service.html -->
+<! -- WebMap, from ArcGIS Online, with Covid Colleges layer, gray basemap and popups, adapted from source: https://github.com/kristofj-umd/webdev-unit/blob/master/webdev5-examples/webmap-esriapi.html -->
 
 <!doctype html>
 <html lang="en">
@@ -8,43 +8,15 @@
   <title>Covid-19 Across College Campuses</title>
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
-  <!-- Load Leaflet from CDN-->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
-    integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
-    crossorigin=""/>
-  <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
-    integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
-    crossorigin="">
-  </script>
-
-  <!-- Load Esri Leaflet from CDN -->
-  <script src="https://unpkg.com/esri-leaflet@2.2.3/dist/esri-leaflet.js"
-    integrity="sha512-YZ6b5bXRVwipfqul5krehD9qlbJzc6KOGXYsDjU9HHXW2gK57xmWl2gU6nAegiErAqFXhygKIsWPKbjLPXVb2g=="
-    crossorigin="">
-  </script>
-
-  <!-- Load Esri Leaflet Renderers from CDN -->
-  <script src="https://unpkg.com/esri-leaflet-renderers@2.0.6/dist/esri-leaflet-renderers.js"
-    integrity="sha512-mhpdD3igvv7A/84hueuHzV0NIKFHmp2IvWnY5tIdtAHkHF36yySdstEVI11JZCmSY4TCvOkgEoW+zcV/rUfo0A=="
-    crossorigin="">
-  </script>
-
   <style>
     html,
     body,
-    #map {
+    #viewDiv {
       height: 100%;
       width: 100%;
       margin: 0;
       padding: 0;
-      top: 60px;
     }
-      
-    /* Fix map height, source: view-source:https://kristofj-umd.github.io/webdev-f19/assignments/webdev3.html */
-    #map {
-      height: calc(100vh - 60px);
-      top: 60px;
-      }
       
     /* Styling the information panel, adapted from source: view-source:https://kristofj-umd.github.io/webdev-f19/assignments/webdev1-floatingpanel.html */
     .floating-panel {
@@ -62,6 +34,42 @@
        color: gold;
     }
   </style>
+    
+  <link rel="stylesheet" href="https://js.arcgis.com/4.9/esri/css/main.css">
+
+  <script src="https://js.arcgis.com/4.9/"></script>
+
+  <script>
+    require([
+      "esri/views/MapView",
+      "esri/WebMap"
+    ], function(
+      MapView, WebMap
+    ) {
+
+      /************************************************************
+       * Creates a new WebMap instance. A WebMap must reference
+       * a PortalItem ID that represents a WebMap saved to
+       * arcgis.com or an on-premise portal.
+       *
+       * To load a WebMap from an on-premise portal, set the portal
+       * url with esriConfig.portalUrl.
+       ************************************************************/
+      var webmap = new WebMap({
+        portalItem: { // autocasts as new PortalItem()
+          id: "856e3639bf79489ba67acbd7cef52442"
+        }
+      });
+
+      /************************************************************
+       * Set the WebMap instance to the map property in a MapView.
+       ************************************************************/
+      var view = new MapView({
+        map: webmap,
+        container: "viewDiv"
+      });
+    });
+  </script>
 </head>
 
 <body>
@@ -71,24 +79,7 @@
         <h4>Text</h4>
     </nav>
     
-    <div id="map"></div>
-
-    <script>
-        // add map and set map view
-        const map = L.map('map', {
-          center: [42.52, -101.667],
-          zoom: 4
-        });
-        
-        // add basemap
-        const esriStreets = L.esri.basemapLayer('Gray').addTo(map);
-
-        // add hosted feature layer
-        const collegecovidLayer = L.esri.featureLayer({url: ''}).addTo(map);
-        
-        // set up popup for layer
-        
-    </script>
+    <div id="viewDiv"></div>
 </body>
 
 </html>
