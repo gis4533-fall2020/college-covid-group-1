@@ -8,78 +8,82 @@
   <title>Covid-19 Across College Campuses</title>
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
+  <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.17/esri/themes/light/main.css"/>
+
   <style>
-    html,
-    body,
-    #viewDiv {
-      height: 100%;
-      width: 100%;
-      margin: 0;
-      padding: 0;
-    }
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+      }
       
-    /* Styling the information panel, adapted from source: view-source:https://kristofj-umd.github.io/webdev-f19/assignments/webdev1-floatingpanel.html */
-    .floating-panel {
-       width: 160px; /* Set the width of the sidebar */
-       position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-       z-index: 9999;
-       bottom: 260px;
-       left: 20px;
-       /* Black with some transparency */
-       background-color: rgba(0, 0, 0, 0.4);
-       border-radius: 10px;    /* some nice rounded corners */
-       padding: 10px;
-       margin: 20px;
-       /* Text color */
-       color: gold;
-    }
+      /* Styling the information panel, adapted from source: view-source:https://kristofj-umd.github.io/webdev-f19/assignments/webdev1-floatingpanel.html */
+      .floating-panel {
+        width: 160px; /* Set the width of the sidebar */
+        position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+        z-index: 9999;
+        bottom: 260px;
+        left: 20px;
+       
+        /* Black with some transparency */
+        background-color: rgba(0, 0, 0, 0.4);
+        border-radius: 10px;    /* some nice rounded corners */
+        padding: 10px;
+        margin: 20px;
+        /* Text color */
+        color: gold;
+      }
   </style>
-    
-  <link rel="stylesheet" href="https://js.arcgis.com/4.9/esri/css/main.css">
 
-  <script src="https://js.arcgis.com/4.9/"></script>
-
+  <script src="https://js.arcgis.com/4.17/"></script>
   <script>
-    require([
-      "esri/views/MapView",
-      "esri/WebMap"
-    ], function(
-      MapView, WebMap
-    ) {
+      require([
+        "esri/views/MapView",
+        "esri/widgets/Legend", // Adding Legend, source: https://codepen.io/pen?&editable=true&editors=100
+        "esri/WebMap"
+      ], function (MapView, Legend, WebMap) {
+        var webmap = new WebMap({
+          portalItem: {
+            // autocasts as new PortalItem()
+            id: "856e3639bf79489ba67acbd7cef52442"
+          }
+        });
 
-      /************************************************************
-       * Creates a new WebMap instance. A WebMap must reference
-       * a PortalItem ID that represents a WebMap saved to
-       * arcgis.com or an on-premise portal.
-       *
-       * To load a WebMap from an on-premise portal, set the portal
-       * url with esriConfig.portalUrl.
-       ************************************************************/
-      var webmap = new WebMap({
-        portalItem: { // autocasts as new PortalItem()
-          id: "856e3639bf79489ba67acbd7cef52442"
-        }
+        var view = new MapView({
+          container: "viewDiv",
+          map: webmap
+        });
+
+        // Adding Legend, source: https://codepen.io/pen?&editable=true&editors=100
+        view.when(function () {
+          // get the first layer in the collection of operational layers in the WebMap
+          // when the resources in the MapView have loaded.
+          var featureLayer = webmap.layers.getItemAt(0);
+
+          var legend = new Legend({
+            view: view,
+            layerInfos: [
+              {
+                layer: featureLayer,
+                title: "Covid-19 Across College Campuses"
+              }
+            ]
+          });
+
+          // Add widget to the bottom right corner of the view
+          view.ui.add(legend, "bottom-right");
+        });
       });
+    </script>
+  </head>
 
-      /************************************************************
-       * Set the WebMap instance to the map property in a MapView.
-       ************************************************************/
-      var view = new MapView({
-        map: webmap,
-        container: "viewDiv"
-      });
-    });
-  </script>
-</head>
-
-<body>
-    <! -- Information Panel, adapted from source: view-source:https://kristofj-umd.github.io/webdev-f19/assignments/webdev1-floatingpanel.html -->
-    <nav class="floating-panel">
-        <h4>Text</h4>
-        <h4>Text</h4>
-    </nav>
-    
+  <body class="calcite">
     <div id="viewDiv"></div>
-</body>
-
+  </body>
 </html>
