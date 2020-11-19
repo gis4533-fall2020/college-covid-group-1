@@ -17,6 +17,52 @@
       margin: 0;
       padding: 0;
     }
+
+    /* Styling the header, adapted from source: view-source:https://kristofj-umd.github.io/webdev-f19/assignments/webdev1.html */
+        #header {
+            /* positions at the top of the page */
+            top: 0;
+            /* make it full width */
+            width: 100%;
+            /* make it visible on top of the map */
+            z-index: 999999;
+            /* fixed position within <body> */
+            position: fixed;
+            /* note that the map is positioned this far from the top of the
+            page*/
+            height: 60px;
+            /* Black text */
+            color: black;
+            /* Lightblue background */
+            background-color: darkgrey;
+            /* some spacing */
+            padding-left: 20px;
+            /* my attempt at not overlapping the map*/
+            overflow: hidden;
+            /* different font */
+            font-family: Helvetica, sans-serif;
+        }
+        /* header children styling */
+        #header * {
+            /* put everything on the same line */
+            display: inline-block;
+            margin-right: 40px;
+            margin-top: 10px;
+        }
+        /* bring items to the right */
+        .right {
+            float: right;
+        }
+        /* link or anchor tag(<a>) styling */
+        a {
+            color: coral;
+        }
+        /* put this text in line with other text in header */
+        #header h1, h4 {
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+=======
       
     /* Styling the information panel, adapted from source: view-source:https://kristofj-umd.github.io/webdev-f19/assignments/webdev1-floatingpanel.html */
     .floating-panel {
@@ -33,10 +79,32 @@
        /* Text color */
        color: gold;
     }
+
   </style>
     
   <link rel="stylesheet" href="https://js.arcgis.com/4.9/esri/css/main.css">
 
+
+<body>
+    <div id="map"></div>
+    
+     <! -- Adding Header, adapted from source: view-source:https://kristofj-umd.github.io/webdev-f19/assignments/webdev1.html --> 
+    <header id="header">
+        <img src="NYT%20logo.png"  style="width: 200px; height: 40px;">
+        <h2><b>Covid 19 Across College Campuses</b></h2>
+        <h4><a href="https://www.nytimes.com/interactive/2020/us/covid-college-cases-tracker.html" target="_blank">Data from New York Time College cases Tracker</a></h4>
+    </header>
+    
+    <script>
+        // add map and set map view
+        const map = L.map('map', {
+          center: [42.52, -101.667],
+          zoom: 4
+        });
+        
+        // add basemap
+        const esriStreets = L.esri.basemapLayer('Gray').addTo(map);
+=======
   <script src="https://js.arcgis.com/4.9/"></script>
 
   <script>
@@ -46,6 +114,7 @@
     ], function(
       MapView, WebMap
     ) {
+
 
       /************************************************************
        * Creates a new WebMap instance. A WebMap must reference
